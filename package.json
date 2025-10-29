@@ -1,0 +1,25 @@
+{
+  "name": "fullstack-hy-osa3",
+  "version": "0.0.1",
+  "description": "osa 3",
+  "homepage": "https://github.com/leopekkas/FullStack-HY-osa3#readme",
+  "bugs": {
+    "url": "https://github.com/leopekkas/FullStack-HY-osa3/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leopekkas/FullStack-HY-osa3.git"
+  },
+  "license": "MIT",
+  "author": "Leopekka Saraste",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "morgan": "^1.10.1"
+  }
+}
