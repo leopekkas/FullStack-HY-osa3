@@ -1,11 +1,15 @@
-const { response } = require('express')
 const express = require('express')
-const app = express()
-
-app.use(express.json())
-
 const morgan = require('morgan')
-morgan.token('body', function (req, res) {return JSON.stringify(req.body) })
+const cors = require('cors')
+
+const app = express()
+app.use(express.json())
+app.use(express.static('build'))
+app.use(cors())
+
+morgan.token('body', (req) => {
+  return req.method === 'POST' ? JSON.stringify(req.body) : ''
+})
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let persons = [
@@ -45,10 +49,17 @@ const generateId = () => {
 }
 
 app.post('/api/persons', (req, res) => {
-    const body = req.body
+    const body = req.body || {}
+    
     if (!body.name || !body.number) {
         return res.status(400).json({
-            error: 'name or number missing'
+            error: 'name missing'
+        })
+    }
+
+    if (!body.number) {
+        return res.status(400).json({
+            error: 'number missing'
         })
     }
 
@@ -80,7 +91,7 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
-    persons = persons.filter(person => persons.id !== id)
+    persons = persons.filter(person => person.id !== id)
     
     res.status(204).end()
 })
@@ -94,6 +105,7 @@ app.get('/info', (req, res) => {
     </div>`)
 })
 
-const PORT = 3001
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+})
